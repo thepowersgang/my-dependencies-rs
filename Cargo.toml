@@ -1,0 +1,8 @@
+[package]
+name = "my_dependencies"
+version = "0.1.0"
+authors = ["John Hodge <tpg@mutabah.net>"]
+
+[dependencies]
+cargo_toml = "0.8"
+syn = { version = "1.0", features = ["extra-traits"] }
