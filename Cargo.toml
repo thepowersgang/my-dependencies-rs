@@ -6,6 +6,7 @@ description = "Enumerate dependencies of the current crate from a build script"
 readme = "README.md"
 keywords = ["cargo.toml", "dependencies"]
 license = "MIT OR Apache-2.0"
+repository = "https://github.com/thepowersgang/my-dependencies-rs.git"
 
 [badges]
 maintenance = { status = "passively-maintained" }
