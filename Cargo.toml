@@ -2,6 +2,13 @@
 name = "my_dependencies"
 version = "0.1.0"
 authors = ["John Hodge <tpg@mutabah.net>"]
+description = "Enumerate dependencies of the current crate from a build script"
+readme = "README.md"
+keywords = ["cargo.toml", "dependencies"]
+license = "MIT OR Apache-2.0"
+
+[badges]
+maintenance = { status = "passively-maintained" }
 
 [dependencies]
 cargo_toml = "0.8"
