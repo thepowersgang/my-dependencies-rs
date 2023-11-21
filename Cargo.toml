@@ -12,5 +12,5 @@ repository = "https://github.com/thepowersgang/my-dependencies-rs.git"
 maintenance = { status = "passively-maintained" }
 
 [dependencies]
-cargo_toml = "0.8"
+cargo_toml = "0.17"
 syn = { version = "1.0", features = ["extra-traits"] }

@@ -29,6 +29,8 @@ pub enum DepSource
     Path(String),
     /// A crates.io depdencency
     CratesIo(String),
+	/// The soruce isn't known (due to a file error, or incomplete workspace information)
+	Unknown,
 }
 #[derive(Debug)]
 pub enum GitRev
@@ -139,6 +141,23 @@ fn get_activedep(dep_features: &HashMap<String, HashSet<String>>, depname: &str,
             features: dep_features.get(depname).cloned().unwrap_or(HashSet::new()),
             }
         },
+    cargo_toml::Dependency::Inherited(details) => {
+        if details.optional && std::env::var_os(format!("CARGO_FEATURE_{}", depname)).is_none() {
+            return None;
+        }
+		// Cannot get the full source without workspace info
+        let source = DepSource::Unknown;
+        let mut features = dep_features.get(depname).cloned().unwrap_or(HashSet::new());
+        for f in &details.features
+        {
+            features.insert(f.clone());
+        }
+        ActiveDependency {
+            source: source,
+            include_default_features: false,	// This depends on if the workspace asked for default features
+            features: features,
+            }
+		},
     cargo_toml::Dependency::Detailed(details) => {
         if details.optional && std::env::var_os(format!("CARGO_FEATURE_{}", depname)).is_none() {
             return None;
@@ -168,7 +187,7 @@ fn get_activedep(dep_features: &HashMap<String, HashSet<String>>, depname: &str,
                     }
             }
             else {
-                panic!("?");
+                DepSource::Unknown
             };
         let mut features = dep_features.get(depname).cloned().unwrap_or(HashSet::new());
         for f in &details.features
@@ -177,7 +196,7 @@ fn get_activedep(dep_features: &HashMap<String, HashSet<String>>, depname: &str,
         }
         ActiveDependency {
             source: source,
-            include_default_features: details.default_features.unwrap_or(true),
+            include_default_features: details.default_features,
             features: features,
             }
         },
